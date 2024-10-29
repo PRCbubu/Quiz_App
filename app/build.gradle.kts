@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
 }
 
 android {
@@ -52,4 +53,16 @@ dependencies {
     //Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+
+    //ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    //LiveData
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+
+    //Annotation Processor
+    kapt(libs.lifecycle.compiler)
+
+    //OkHTTP
+    implementation(libs.okhttp)
 }
