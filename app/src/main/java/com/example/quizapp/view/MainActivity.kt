@@ -1,7 +1,10 @@
 package com.example.quizapp.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.RadioButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -43,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         //Displaying the first Question
         GlobalScope.launch(Dispatchers.Main) {
             quizViewModel.getQuestionsFromLiveData().observe(this@MainActivity, Observer {
-                if (it>0)
+                if (it.size > 0)
                 {
                     questionsList = it
                     Log.i("TAGGY", "This the 1st question: ${questionsList[0].question}")
@@ -56,6 +59,70 @@ class MainActivity : AppCompatActivity() {
                         radio4.text = questionsList!![0].option4
                     }
                 }
+            })
+        }
+
+        //Adding Functionality to Next BTN
+        var i = 1
+        binding.apply {
+            btnNext.setOnClickListener(View.OnClickListener {
+              val selectedOption = radioGroup?.checkedRadioButtonId
+
+              if(selectedOption != -1)
+              {
+                  val radioButton = findViewById<View>(selectedOption!!) as RadioButton
+
+                  questionsList.let {
+
+                      if(i<it.size!!)
+                      {
+                          //Getting number of questions
+                          totalQuestions = it.size
+                          if(radioButton.text.toString().equals(it[i-1].correct_option))
+                          {
+                              result++
+                              txtResult?.text = "Correct: $result"
+                          }
+                          else
+                          {
+                              txtResult.text = "Wrong"
+                          }
+
+                          //Displaying the next question
+                          txtQuestion.text = "Questions ${i+1}: "+ it[i].question
+                          radio1.text = it[i].option1
+                          radio2.text = it[i].option2
+                          radio3.text = it[i].option3
+                          radio4.text = it[i].option4
+
+                          //checking if it is the last question
+                          if(i == it.size!!.minus(1))
+                          {
+                              btnNext.text = "Finish"
+
+                          }
+
+                          radioGroup?.clearCheck()
+                          i++
+                      }
+                      else
+                      {
+                          if(radioButton.text.toString().equals(it[i-1].correct_option))
+                          {
+                              result++
+                              txtResult?.text = "Correct: $result"
+                          }
+
+                          val intent = Intent(this@MainActivity, ResultActivity::class.java)
+                          startActivity(intent)
+                          finish()
+                      }
+                  }
+              }
+                else
+              {
+                  txtResult.text = "Please select an option"
+              }
             })
         }
     }

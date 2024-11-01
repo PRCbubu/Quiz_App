@@ -4,4 +4,7 @@
     <string name="ready_for_the_challenge">Ready for the challenge</string>
     <string name="next">Next</string>
     <string name="correct">correct</string>
+    <string name="result">Result</string>
+    <string name="answer">0</string>
+    <string name="back">Back</string>
 </resources>
